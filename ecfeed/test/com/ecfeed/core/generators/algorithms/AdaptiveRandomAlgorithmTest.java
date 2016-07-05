@@ -24,7 +24,7 @@ import org.junit.Test;
 import com.ecfeed.core.generators.algorithms.AdaptiveRandomAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
+import com.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class AdaptiveRandomAlgorithmTest {
 	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new ArrayList<IConstraint<String>>();

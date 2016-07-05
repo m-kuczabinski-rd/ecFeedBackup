@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ecFeed
-Bundle-SymbolicName: com.testify.ecfeed; singleton:=true
+Bundle-SymbolicName: com.ecfeed; singleton:=true
 Bundle-Version: 1.10.1.qualifier
 Bundle-Activator: com.ecfeed.ui.plugin.Activator
 Bundle-Vendor: ecFeed AS
@@ -38,12 +38,12 @@ Export-Package: com.ecfeed.android.external,
  com.ecfeed.application,
  com.ecfeed.core.generators,
  com.ecfeed.core.generators.algorithms,
+ com.ecfeed.core.generators.testutils,
+ com.ecfeed.junit,
+ com.ecfeed.junit.annotations,
  com.ecfeed.ui.common.utils,
  com.ecfeed.ui.dialogs.basic,
  com.ecfeed.ui.editor,
  com.ecfeed.ui.editor.actions,
  com.ecfeed.ui.handlers,
- com.ecfeed.utils,
- com.testify.ecfeed.core.generators.testutils,
- com.testify.ecfeed.junit,
- com.testify.ecfeed.junit.annotations
+ com.ecfeed.utils

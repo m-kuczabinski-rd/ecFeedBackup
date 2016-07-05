@@ -23,7 +23,7 @@ import com.ecfeed.ui.common.Messages;
 
 public class UserTypeSelectionDialog extends TestClassSelectionDialog {
 
-    protected static final IStatus ERROR = new Status(IStatus.ERROR, "com.testify.ecfeed",
+    protected static final IStatus ERROR = new Status(IStatus.ERROR, "com.ecfeed",
     		"Select enum element that with no constructor or public, parameterless one");
 
     protected class UserTypeSelectionValidator implements ISelectionStatusValidator{

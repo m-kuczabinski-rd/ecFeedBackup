@@ -11,8 +11,8 @@
 
 package com.ecfeed.core.generators.algorithms;
 
-import static com.testify.ecfeed.core.generators.testutils.AlgorithmTestUtils.calculateCoveredTuples;
-import static com.testify.ecfeed.core.generators.testutils.AlgorithmTestUtils.calculateTotalTuples;
+import static com.ecfeed.core.generators.testutils.AlgorithmTestUtils.calculateCoveredTuples;
+import static com.ecfeed.core.generators.testutils.AlgorithmTestUtils.calculateTotalTuples;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -27,7 +27,7 @@ import com.ecfeed.core.generators.algorithms.CartesianProductAlgorithm;
 import com.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
+import com.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class AlgorithmPerformanceTests {
 	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new ArrayList<IConstraint<String>>();

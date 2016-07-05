@@ -25,7 +25,7 @@ import com.ecfeed.core.generators.CartesianProductGenerator;
 import com.ecfeed.core.generators.algorithms.CartesianProductAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
+import com.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class CartesianGeneratorTest{
 	@Test

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <bundle id="com.testify.ecfeed" version="1.8.2.qualifier">
-      <category name="com.testify.ecfeed"/>
+   <bundle id="com.ecfeed" version="1.8.2.qualifier">
+      <category name="com.ecfeed"/>
    </bundle>
-   <category-def name="com.testify.ecfeed" label="ecFeed">
+   <category-def name="com.ecfeed" label="ecFeed">
       <description>
          Test data generator and jUnit test execution framework based on equivalence class model.
       </description>

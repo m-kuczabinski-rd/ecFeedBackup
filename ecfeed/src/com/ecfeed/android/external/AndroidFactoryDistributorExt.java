@@ -30,7 +30,7 @@ public class AndroidFactoryDistributorExt {
 
 	public static IAndroidFactoryExt getFactoryFromRegistry() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final String ID = "com.testify.ecfeed.extensionpoint.definition.androidfactory";
+		final String ID = "com.ecfeed.extensionpoint.definition.androidfactory";
 
 		IConfigurationElement[] config =
 				registry.getConfigurationElementsFor(ID);		

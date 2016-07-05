@@ -25,8 +25,8 @@ import com.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
 import com.ecfeed.core.generators.algorithms.Tuples;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.testutils.GeneratorTestUtils;
 import com.google.common.collect.Sets;
-import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class OptimalNWiseTest extends NWiseAlgorithmTest {
 

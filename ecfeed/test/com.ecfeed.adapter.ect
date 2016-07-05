@@ -1,0 +1,1148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="com.ecfeed.adapter" version="1">
+    <Class name="com.ecfeed.adapter.ModelOperationManagerTest" runOnAndroid="false">
+        <Method name="executeTest"/>
+        <Method name="undoEnabledTest">
+            <Parameter name="performedOperations" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="performedUndos" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="3" value="3"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="performedRedos" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="1" value="1"/>
+                <Choice name="3" value="3"/>
+                <Choice name="4" value="4"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="aditionalOperations" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="0" value="0"/>
+                <Choice name="1" value="1"/>
+            </Parameter>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+        </Method>
+        <Method name="redoEnabledTest">
+            <Parameter name="performedOperations" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="performedUndos" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="3" value="3"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="performedRedos" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="1" value="1"/>
+                <Choice name="3" value="3"/>
+                <Choice name="4" value="4"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+        </Method>
+        <Method name="undoTest">
+            <Parameter name="performedOperations" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="performedUndos" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="3" value="3"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="performedRedos1" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="1" value="1"/>
+                <Choice name="3" value="3"/>
+                <Choice name="4" value="4"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="aditionalOperations" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="0" value="0"/>
+                <Choice name="1" value="1"/>
+            </Parameter>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="0"/>
+            </TestCase>
+            <TestCase testSuite="full\scover">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+        </Method>
+        <Method name="redoTest">
+            <Parameter name="performedOperations" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="performedUndos" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="3" value="3"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <Parameter name="performedRedos" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="1" value="1"/>
+                <Choice name="3" value="3"/>
+                <Choice name="4" value="4"/>
+                <Choice name="5" value="5"/>
+            </Parameter>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="zero"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="1"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="3"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="4"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+                <TestParameter choice="5"/>
+            </TestCase>
+        </Method>
+    </Class>
+</Model>

@@ -12,7 +12,7 @@
 package com.ecfeed.ui.common;
 
 public class Constants {
-	public static final String ECT_EDITOR_ID = "com.testify.ecfeed.ui.EctEditor";
+	public static final String ECT_EDITOR_ID = "com.ecfeed.ui.EctEditor";
 
 	public static final String ICONS_FOLDER_NAME = "icons";
 

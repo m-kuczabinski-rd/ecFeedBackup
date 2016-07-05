@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.testify.ecfeed"
+      id="com.ecfeed"
       label="ecFeed"
       version="1.10.1.qualifier"
       provider-name="ecFeed AS">
@@ -234,13 +234,13 @@ If the Library as you received it specifies that a proxy can decide whether futu
    </license>
 
    <plugin
-         id="com.testify.ecfeed"
+         id="com.ecfeed"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
    <plugin
-         id="com.testify.ecfeed.android"
+         id="com.ecfeed.android"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -27,8 +27,8 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import com.ecfeed.ui.common.Messages;
 
 public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
-    protected static final IStatus OK = new Status(IStatus.OK, "com.testify.ecfeed", "");
-    protected static final IStatus ERROR = new Status(IStatus.ERROR, "com.testify.ecfeed",
+    protected static final IStatus OK = new Status(IStatus.OK, "com.ecfeed", "");
+    protected static final IStatus ERROR = new Status(IStatus.ERROR, "com.ecfeed",
     		"Select class element");
 
     protected class TypeSelectionValidator implements ISelectionStatusValidator{

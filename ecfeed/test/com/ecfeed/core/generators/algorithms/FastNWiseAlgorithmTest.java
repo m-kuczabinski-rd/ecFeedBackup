@@ -24,7 +24,7 @@ import com.ecfeed.core.generators.algorithms.IAlgorithm;
 import com.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
+import com.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
 

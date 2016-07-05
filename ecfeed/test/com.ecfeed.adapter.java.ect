@@ -1,0 +1,1255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="com.ecfeed.adapter.java" version="1">
+    <Class name="com.ecfeed.adapter.java.JavaImplementationStatusResolverTest" runOnAndroid="false">
+        <Method name="primitiveChoiceStatusTest">
+            <Parameter name="type" type="com.ecfeed.testutils.ETypeName" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="boolean" value="BOOLEAN"/>
+                <Choice name="char" value="CHAR"/>
+                <Choice name="byte" value="BYTE"/>
+                <Choice name="short" value="SHORT"/>
+                <Choice name="int" value="INT"/>
+                <Choice name="long" value="LONG"/>
+                <Choice name="float" value="FLOAT"/>
+                <Choice name="double" value="DOUBLE"/>
+                <Choice name="String" value="STRING"/>
+            </Parameter>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="boolean"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="char"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="byte"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="short"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="int"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="long"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="float"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="double"/>
+            </TestCase>
+            <TestCase testSuite="full\scoverage">
+                <TestParameter choice="String"/>
+            </TestCase>
+        </Method>
+        <Method name="userTypeChoiceStatusTest">
+            <Parameter name="abstractChoice" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="abstract" value="true"/>
+                <Choice name="leaf" value="false"/>
+            </Parameter>
+            <Parameter name="parameterImplemented" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="parameter\simplemented" value="true"/>
+                <Choice name="parameter\snot\simplemented" value="false"/>
+            </Parameter>
+            <Parameter name="status" type="com.ecfeed.adapter.EImplementationStatus" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implemented" value="IMPLEMENTED"/>
+                <Choice name="partly\simplemented" value="PARTIALLY_IMPLEMENTED"/>
+                <Choice name="not\simplemented" value="NOT_IMPLEMENTED"/>
+                <Choice name="irrelevant" value="IRRELEVANT"/>
+            </Parameter>
+            <Constraint name="constraint">
+                <Premise>
+                    <StatementArray operator="or">
+                        <Statement choice="irrelevant" parameter="status" relation="="/>
+                        <StatementArray operator="and">
+                            <Statement choice="abstract" parameter="abstractChoice" relation="≠"/>
+                            <Statement choice="partly\simplemented" parameter="status" relation="="/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement choice="parameter\snot\simplemented" parameter="parameterImplemented" relation="="/>
+                            <Statement choice="not\simplemented" parameter="status" relation="≠"/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parameterStatusTest">
+            <Parameter name="type" type="com.ecfeed.adapter.java.JavaImplementationStatusResolverTest.EParameterType" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="primitive" value="PRIMITIVE"/>
+                <Choice name="implemented\suser\stype" value="IMPLEMENTED_USER_TYPE"/>
+                <Choice name="unimplemented\suser\stype" value="UNIMPLEMENTED_USER_TYPE"/>
+            </Parameter>
+            <Parameter name="expected" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="expected" value="true"/>
+                <Choice name="not\sexpected" value="false"/>
+            </Parameter>
+            <Parameter name="noOfChoices" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="2"/>
+            </Parameter>
+            <Parameter name="choicesImplemented" type="com.ecfeed.adapter.java.JavaImplementationStatusResolverTest.EImplementedChildren" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="none" value="NONE"/>
+                <Choice name="some" value="SOME"/>
+                <Choice name="all" value="ALL"/>
+            </Parameter>
+            <Parameter name="status" type="com.ecfeed.adapter.EImplementationStatus" isExpected="true" expected="IMPLEMENTED" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implemented" value="IMPLEMENTED"/>
+                <Choice name="partly\simplemented" value="PARTIALLY_IMPLEMENTED"/>
+                <Choice name="not\simplemented" value="NOT_IMPLEMENTED"/>
+                <Choice name="irrelevant" value="IRRELEVANT"/>
+            </Parameter>
+            <Constraint name="expected\svalue\sconstraint">
+                <Premise>
+                    <StatementArray operator="or">
+                        <StatementArray operator="and">
+                            <Statement choice="primitive" parameter="type" relation="="/>
+                            <Statement choice="expected" parameter="expected" relation="="/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement choice="primitive" parameter="type" relation="="/>
+                            <Statement choice="zero" parameter="noOfChoices" relation="≠"/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement choice="implemented\suser\stype" parameter="type" relation="="/>
+                            <Statement choice="zero" parameter="noOfChoices" relation="≠"/>
+                            <Statement choice="all" parameter="choicesImplemented" relation="="/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue\sconstraint">
+                <Premise>
+                    <StatementArray operator="or">
+                        <StatementArray operator="and">
+                            <StatementArray operator="or">
+                                <Statement choice="primitive" parameter="type" relation="="/>
+                                <Statement choice="implemented\suser\stype" parameter="type" relation="="/>
+                            </StatementArray>
+                            <Statement choice="zero" parameter="noOfChoices" relation="="/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement choice="implemented\suser\stype" parameter="type" relation="="/>
+                            <Statement choice="zero" parameter="noOfChoices" relation="≠"/>
+                            <Statement choice="all" parameter="choicesImplemented" relation="≠"/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="PARTIALLY_IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue\sconstraint">
+                <Premise>
+                    <Statement choice="unimplemented\suser\stype" parameter="type" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="NOT_IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="invalid\scombinations">
+                <Premise>
+                    <StatementArray operator="or">
+                        <StatementArray operator="and">
+                            <Statement choice="primitive" parameter="type" relation="="/>
+                            <Statement choice="all" parameter="choicesImplemented" relation="≠"/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement choice="unimplemented\suser\stype" parameter="type" relation="="/>
+                            <Statement choice="none" parameter="choicesImplemented" relation="≠"/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement choice="zero" parameter="noOfChoices" relation="="/>
+                            <Statement choice="none" parameter="choicesImplemented" relation="≠"/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="testCaseStatusTest">
+            <Parameter name="noOfChoices" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="&gt;1" value="2"/>
+            </Parameter>
+            <Parameter name="choicesImplemented" type="com.ecfeed.adapter.java.JavaImplementationStatusResolverTest.EImplementedChildren" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="none" value="NONE"/>
+                <Choice name="some" value="SOME"/>
+                <Choice name="all" value="ALL"/>
+            </Parameter>
+            <Parameter name="status" type="com.ecfeed.adapter.EImplementationStatus" isExpected="true" expected="IMPLEMENTED" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="partition" value="IMPLEMENTED"/>
+                <Choice name="partition1" value="PARTIALLY_IMPLEMENTED"/>
+                <Choice name="partition2" value="NOT_IMPLEMENTED"/>
+            </Parameter>
+            <Constraint name="invalid\sinput">
+                <Premise>
+                    <StatementArray operator="or">
+                        <StatementArray operator="and">
+                            <Statement choice="zero" parameter="noOfChoices" relation="="/>
+                            <Statement choice="none" parameter="choicesImplemented" relation="≠"/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="or">
+                        <Statement choice="zero" parameter="noOfChoices" relation="="/>
+                        <Statement choice="all" parameter="choicesImplemented" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="zero" parameter="noOfChoices" relation="≠"/>
+                        <Statement choice="some" parameter="choicesImplemented" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="PARTIALLY_IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="zero" parameter="noOfChoices" relation="≠"/>
+                        <Statement choice="none" parameter="choicesImplemented" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="NOT_IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="classStatusTest">
+            <Parameter name="classDefinitionImplemented" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implemented" value="true"/>
+                <Choice name="not\simplemented" value="false"/>
+            </Parameter>
+            <Parameter name="noOfMethods" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="zero" value="0"/>
+                <Choice name="&gt;1" value="2"/>
+            </Parameter>
+            <Parameter name="methodsImplemented" type="com.ecfeed.adapter.java.JavaImplementationStatusResolverTest.EImplementedChildren" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="none" value="NONE"/>
+                <Choice name="some" value="SOME"/>
+                <Choice name="all" value="ALL"/>
+            </Parameter>
+            <Parameter name="status" type="com.ecfeed.adapter.EImplementationStatus" isExpected="true" expected="IMPLEMENTED" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implemented" value="IMPLEMENTED"/>
+                <Choice name="partially\simplemented" value="PARTIALLY_IMPLEMENTED"/>
+                <Choice name="not\simplemented" value="NOT_IMPLEMENTED"/>
+            </Parameter>
+            <Constraint name="invalid\sinput">
+                <Premise>
+                    <StatementArray operator="or">
+                        <StatementArray operator="and">
+                            <Statement choice="not\simplemented" parameter="classDefinitionImplemented" relation="="/>
+                            <Statement choice="none" parameter="methodsImplemented" relation="≠"/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement choice="zero" parameter="noOfMethods" relation="="/>
+                            <Statement choice="none" parameter="methodsImplemented" relation="≠"/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="implemented" parameter="classDefinitionImplemented" relation="="/>
+                        <StatementArray operator="or">
+                            <Statement choice="zero" parameter="noOfMethods" relation="="/>
+                            <Statement choice="all" parameter="methodsImplemented" relation="="/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="epected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="implemented" parameter="classDefinitionImplemented" relation="="/>
+                        <Statement choice="&gt;1" parameter="noOfMethods" relation="="/>
+                        <Statement choice="all" parameter="methodsImplemented" relation="≠"/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="PARTIALLY_IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="not\simplemented" parameter="classDefinitionImplemented" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="NOT_IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="constraintStatusTest"/>
+        <Method name="methodStatusTest">
+            <Parameter name="parentImplemented" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="parent\simplemented" value="true"/>
+                <Choice name="parent\snot\simplemented" value="false"/>
+            </Parameter>
+            <Parameter name="signature" type="com.ecfeed.adapter.java.JavaImplementationStatusResolverTest.EImplementedSignatureElements" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="parameterized" value="VALUE">
+                    <Choice name="parameterized\snothing\simplemented" value="PARAMETERS_NOTHING_IMPLEMENTED"/>
+                    <Choice name="parameterized\sname\simplemented" value="PARAMETERS_NAME_IMPLEMENTED"/>
+                    <Choice name="parameterized\sparameters\stypes\simplemented" value="PARAMETERS_TYPES_IMPLEMENTED">
+                        <Label label="has\sparameters\simplemented"/>
+                    </Choice>
+                    <Choice name="parameterized\sall\simplemented" value="PARAMETERS_NAME_AND_PARAMETERS_IMPLEMENTED">
+                        <Label label="has\sparameters\simplemented"/>
+                    </Choice>
+                </Choice>
+                <Choice name="not\sparameterized" value="VALUE">
+                    <Choice name="name\simplemented" value="NO_PARAMETERS_NAME_IMPLEMENTED"/>
+                    <Choice name="name\snot\simplemented" value="NO_PARAMETERS_NAME_NOT_IMPLEMENTED"/>
+                </Choice>
+            </Parameter>
+            <Parameter name="childrenStatus" type="com.ecfeed.adapter.java.JavaImplementationStatusResolverTest.EChildrenStatus" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="no\schildren" value="NO_CHILDREN"/>
+                <Choice name="all\snot\simplemented" value="ALL_NOT_IMPLEMENTED">
+                    <Label label="has\snot\simplemented\schildren"/>
+                </Choice>
+                <Choice name="some\spartly\simplemented" value="SOME_PARTLY_IMPLEMENTED_REST_NOT_IMPLEMENTED">
+                    <Label label="has\snot\simplemented\schildren"/>
+                </Choice>
+                <Choice name="all\spartly" value="ALL_PARTLY_IMPLEMENTED"/>
+                <Choice name="some\simplemented\srest\snot" value="SOME_IMPLEMENTED_REST_NOT_IMPLEMENTED">
+                    <Label label="has\snot\simplemented\schildren"/>
+                </Choice>
+                <Choice name="some\simplemented\srest\spartly" value="SOME_IMPLEMENTED_REST_PARTLY_IMPLEMENTED"/>
+                <Choice name="all\simplemented" value="ALL_IMPLEMENTED"/>
+                <Choice name="partly\s+\snot\s+\simplemented" value="FULL_MIX">
+                    <Label label="has\snot\simplemented\schildren"/>
+                </Choice>
+            </Parameter>
+            <Parameter name="status" type="com.ecfeed.adapter.EImplementationStatus" isExpected="true" expected="NOT_IMPLEMENTED" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implemented" value="IMPLEMENTED"/>
+                <Choice name="partially\simplemented" value="PARTIALLY_IMPLEMENTED"/>
+                <Choice name="not\simplemented" value="NOT_IMPLEMENTED"/>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="parent\simplemented" parameter="parentImplemented" relation="="/>
+                        <StatementArray operator="or">
+                            <Statement choice="parameterized:parameterized\sall\simplemented" parameter="signature" relation="="/>
+                            <Statement choice="not\sparameterized:name\simplemented" parameter="signature" relation="="/>
+                        </StatementArray>
+                        <StatementArray operator="or">
+                            <Statement choice="no\schildren" parameter="childrenStatus" relation="="/>
+                            <Statement choice="all\simplemented" parameter="childrenStatus" relation="="/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="parent\simplemented" parameter="parentImplemented" relation="="/>
+                        <Statement choice="parameterized:parameterized\sall\simplemented" parameter="signature" relation="="/>
+                        <StatementArray operator="and">
+                            <Statement choice="no\schildren" parameter="childrenStatus" relation="≠"/>
+                            <Statement choice="all\simplemented" parameter="childrenStatus" relation="≠"/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="PARTIALLY_IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="invalid\sinput">
+                <Premise>
+                    <StatementArray operator="or">
+                        <StatementArray operator="and">
+                            <Statement choice="parameterized" parameter="signature" relation="="/>
+                            <Statement choice="no\schildren" parameter="childrenStatus" relation="="/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement choice="not\sparameterized" parameter="signature" relation="="/>
+                            <Statement choice="no\schildren" parameter="childrenStatus" relation="≠"/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <LabelStatement label="has\sparameters\simplemented" parameter="signature" relation="="/>
+                            <LabelStatement label="has\snot\simplemented\schildren" parameter="childrenStatus" relation="="/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="input">
+                <Premise>
+                    <Statement choice="parent\snot\simplemented" parameter="parentImplemented" relation="="/>
+                </Premise>
+                <Consequence>
+                    <StatementArray operator="and">
+                        <StatementArray operator="or">
+                            <Statement choice="not\sparameterized:name\snot\simplemented" parameter="signature" relation="="/>
+                            <Statement choice="parameterized:parameterized\snothing\simplemented" parameter="signature" relation="="/>
+                        </StatementArray>
+                    </StatementArray>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="projectStatusTest">
+            <Parameter name="childrenStatus" type="com.ecfeed.adapter.java.JavaImplementationStatusResolverTest.EChildrenStatus" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="no\schildren" value="NO_CHILDREN"/>
+                <Choice name="all\snot\simplemented" value="ALL_NOT_IMPLEMENTED">
+                    <Label label="has\snot\simplemented\schildren"/>
+                </Choice>
+                <Choice name="some\spartly\simplemented" value="SOME_PARTLY_IMPLEMENTED_REST_NOT_IMPLEMENTED">
+                    <Label label="has\snot\simplemented\schildren"/>
+                </Choice>
+                <Choice name="all\spartly" value="ALL_PARTLY_IMPLEMENTED"/>
+                <Choice name="some\simplemented\srest\snot" value="SOME_IMPLEMENTED_REST_NOT_IMPLEMENTED">
+                    <Label label="has\snot\simplemented\schildren"/>
+                </Choice>
+                <Choice name="some\simplemented\srest\spartly" value="SOME_IMPLEMENTED_REST_PARTLY_IMPLEMENTED"/>
+                <Choice name="all\simplemented" value="ALL_IMPLEMENTED"/>
+                <Choice name="partly\s+\snot\s+\simplemented" value="FULL_MIX">
+                    <Label label="has\snot\simplemented\schildren"/>
+                </Choice>
+            </Parameter>
+            <Parameter name="status" type="com.ecfeed.adapter.EImplementationStatus" isExpected="true" expected="PARTIALLY_IMPLEMENTED" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implemented" value="IMPLEMENTED"/>
+                <Choice name="partially\simplemented" value="PARTIALLY_IMPLEMENTED"/>
+                <Choice name="not\simplemented" value="NOT_IMPLEMENTED"/>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="or">
+                        <Statement choice="no\schildren" parameter="childrenStatus" relation="="/>
+                        <Statement choice="all\simplemented" parameter="childrenStatus" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="status" value="IMPLEMENTED"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+    <Class name="com.ecfeed.adapter.java.JavaUtilsTest" runOnAndroid="false">
+        <Method name="isValidTypeNameTest">
+            <Parameter name="packageName" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="empty" value="">
+                    <Label label="valid\spackage"/>
+                </Choice>
+                <Choice name="null" value="/null">
+                    <Label label="invalid\spackage"/>
+                </Choice>
+                <Choice name="one\ssegment" value="">
+                    <Choice name="valid" value="name">
+                        <Label label="valid\spackage"/>
+                        <Choice name="lower\scase" value="name"/>
+                        <Choice name="upper\scase" value="NAME"/>
+                        <Choice name="mixed" value="Name"/>
+                    </Choice>
+                    <Choice name="invalid" value="">
+                        <Label label="invalid\spackage"/>
+                        <Choice name="java\skeyword" value="">
+                            <Choice name="class" value="class"/>
+                            <Choice name="type\sname" value="int"/>
+                            <Choice name="for" value="for"/>
+                            <Choice name="while" value="while"/>
+                        </Choice>
+                        <Choice name="forbidden\skey" value="">
+                            <Choice name="space" value="name\sname"/>
+                            <Choice name="coma" value="name,name"/>
+                            <Choice name="exclamation" value="!"/>
+                        </Choice>
+                    </Choice>
+                </Choice>
+                <Choice name="many\ssegments" value="">
+                    <Choice name="valid" value="name">
+                        <Label label="valid\spackage"/>
+                        <Choice name="lower\scase" value="many.valid.segments"/>
+                        <Choice name="upper\scase" value="MANY.VALID.SEGMENTS">
+                            <Choice name="not\skeyword" value="NAME"/>
+                            <Choice name="keyword" value="INT"/>
+                        </Choice>
+                        <Choice name="mixed" value="Many.Valid.Segments">
+                            <Choice name="not\skeyword" value="Name"/>
+                            <Choice name="keyword" value="whilE"/>
+                        </Choice>
+                    </Choice>
+                    <Choice name="invalid" value="">
+                        <Label label="invalid\spackage"/>
+                        <Choice name="java\skeyword" value="">
+                            <Choice name="beginning" value="float.valid.segment"/>
+                            <Choice name="middle" value="valid.package.segment"/>
+                            <Choice name="end" value="valid.segment.do"/>
+                        </Choice>
+                        <Choice name="forbidden\skey" value="">
+                            <Choice name="space" value="name\sname.valid"/>
+                            <Choice name="coma" value="name,name.valid"/>
+                            <Choice name="exclamation" value="!invalid.valid"/>
+                        </Choice>
+                    </Choice>
+                </Choice>
+            </Parameter>
+            <Parameter name="className" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="valid" value="name">
+                    <Label label="valid\sclass"/>
+                    <Choice name="lower\scase" value="name"/>
+                    <Choice name="upper\scase" value="NAME"/>
+                    <Choice name="mixed" value="Name"/>
+                </Choice>
+                <Choice name="invalid" value="">
+                    <Label label="invalid\sclass"/>
+                    <Choice name="java\skeyword" value="">
+                        <Choice name="class" value="class"/>
+                        <Choice name="for" value="for"/>
+                        <Choice name="while" value="while"/>
+                    </Choice>
+                    <Choice name="forbidden\skey" value="">
+                        <Choice name="space" value="name\sname"/>
+                        <Choice name="coma" value="name,name"/>
+                        <Choice name="exclamation" value="!"/>
+                    </Choice>
+                </Choice>
+                <Choice name="primitive\stype" value="int">
+                    <Choice name="int" value="int"/>
+                    <Choice name="byte" value="byte"/>
+                    <Choice name="char" value="char"/>
+                    <Choice name="double" value="double"/>
+                    <Choice name="long" value="long"/>
+                </Choice>
+                <Choice name="empty" value="">
+                    <Label label="invalid\sclass"/>
+                </Choice>
+                <Choice name="null" value="/null">
+                    <Label label="invalid\sclass"/>
+                </Choice>
+                <Choice name="String" value="String">
+                    <Label label="valid\sclass"/>
+                </Choice>
+            </Parameter>
+            <Parameter name="valid" type="boolean" isExpected="true" expected="true" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="true" value="true"/>
+                <Choice name="false" value="false"/>
+            </Parameter>
+            <Constraint name="valid">
+                <Premise>
+                    <StatementArray operator="or">
+                        <LabelStatement label="invalid\spackage" parameter="packageName" relation="="/>
+                        <LabelStatement label="invalid\sclass" parameter="className" relation="="/>
+                        <StatementArray operator="and">
+                            <Statement choice="empty" parameter="packageName" relation="≠"/>
+                            <Statement choice="primitive\stype" parameter="className" relation="="/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="valid" value="false"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+    <Class name="com.ecfeed.adapter.java.ChoiceValueParserTest" runOnAndroid="false">
+        <Method name="parseBooleanTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="other" value="">
+                    <Choice name="digit" value="1"/>
+                    <Choice name="empty" value=""/>
+                    <Choice name="null" value="/null"/>
+                </Choice>
+                <Choice name="parseable" value="">
+                    <Choice name="false" value="false">
+                        <Choice name="lower\scase" value="false"/>
+                        <Choice name="upper\scase" value="FALSE"/>
+                        <Choice name="mixed\scases" value="False"/>
+                    </Choice>
+                    <Choice name="true" value="true">
+                        <Choice name="lower\scase" value="true"/>
+                        <Choice name="upper\scase" value="TRUE"/>
+                        <Choice name="mixed\scases" value="True"/>
+                    </Choice>
+                </Choice>
+            </Parameter>
+            <Parameter name="value" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="true" value="true"/>
+                <Choice name="false" value="false"/>
+            </Parameter>
+            <Parameter name="nullExpected" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="true" value="true"/>
+                <Choice name="false" value="false"/>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="parseable:true" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="value" value="true"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="parseable:false" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="value" value="false"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\snull">
+                <Premise>
+                    <Statement choice="parseable" parameter="valueString" relation="≠"/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="nullExpected" value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseByteTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="MIN_VALUE"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="byte" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseShortTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="MIN_VALUE"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="short" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseIntegerTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="MIN_VALUE"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="int" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseLongTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="MIN_VALUE"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="long" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseCharTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="ascii" value="a"/>
+                <Choice name="non\sascii" value="か"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="char" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="ascii" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="a"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="non\sascii" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="か"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseFloatTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="negative\sinfinity" value="NEGATIVE_INFINITY"/>
+                <Choice name="negative" value="-3.14"/>
+                <Choice name="negative\sinteger" value="-1"/>
+                <Choice name="zero\sfloat" value="0.0"/>
+                <Choice name="zero\sinteger" value="0"/>
+                <Choice name="positive\sfloat" value="3.14"/>
+                <Choice name="positive\sinteger" value="1"/>
+                <Choice name="min\svalue" value="MIN_VALUE"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="positive\sinfinity" value="POSITIVE_INFINITY"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="float" isExpected="true" expected="0.0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative\sinfinity" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="NEGATIVE_INFINITY"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-3.14"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero\sfloat" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0.0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0.0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sfloat" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="3.14"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min\svalue" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sinfinity" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="POSITIVE_INFINITY"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseDoubleTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="negative\sinfinity" value="NEGATIVE_INFINITY"/>
+                <Choice name="negative" value="-3.14"/>
+                <Choice name="negative\sinteger" value="-1"/>
+                <Choice name="zero\sfloat" value="0.0"/>
+                <Choice name="zero\sinteger" value="0"/>
+                <Choice name="positive\sfloat" value="3.14"/>
+                <Choice name="positive\sinteger" value="1"/>
+                <Choice name="min\svalue" value="MIN_VALUE"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="positive\sinfinity" value="POSITIVE_INFINITY"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="double" isExpected="true" expected="0.0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative\sinfinity" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="NEGATIVE_INFINITY"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-3.14"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero\sfloat" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0.0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0.0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sfloat" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="3.14"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min\svalue" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sinfinity" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="POSITIVE_INFINITY"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseStringTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="normal\sstring" value="normal\sstring"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="String" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="normal\sstring" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="normal\sstring"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="constraint">
+                <Premise>
+                    <Statement choice="null" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="/null"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseUserTypeTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implemented" value="IMPLEMENTED"/>
+                <Choice name="not\simplemented" value="NOT_IMPLEMENTED"/>
+                <Choice name="not\sparseable" value="NOT_PARSEABLE"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="type" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="existing" value="com.ecfeed.adapter.java.ChoiceValueParserTest.ImplementedType"/>
+                <Choice name="not\sexisting" value="not.existing.type"/>
+            </Parameter>
+            <Parameter name="parsedCorrectly" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="existing" parameter="type" relation="="/>
+                        <Statement choice="implemented" parameter="valueString" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedCorrectly" value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+</Model>

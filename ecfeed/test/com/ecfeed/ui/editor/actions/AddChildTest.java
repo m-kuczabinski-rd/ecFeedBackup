@@ -1,10 +1,10 @@
 package com.ecfeed.ui.editor.actions;
 
-import com.testify.ecfeed.junit.annotations.expected;
-import com.testify.ecfeed.testutils.ENodeType;
+import com.ecfeed.junit.annotations.expected;
+import com.ecfeed.testutils.ENodeType;
 
 //@RunWith(StaticRunner.class)
-//@EcModel("test/com.testify.ecfeed.ui.editor.actions.ect")
+//@EcModel("test/com.ecfeed.ui.editor.actions.ect")
 public class AddChildTest {
 
 //	@Test

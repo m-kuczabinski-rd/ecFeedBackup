@@ -16,7 +16,7 @@ import com.ecfeed.core.utils.PackageClassHelper;
 
 public class PackageClassHelperTest{
 
-	private static final String PACKAGE = "com.testify.ecfeed.utils";
+	private static final String PACKAGE = "com.ecfeed.utils";
 	private static final String CLASS = "Class";
 	private static final String PACKAGE_WITH_CLASS = PACKAGE + PackageClassHelper.PACKAGE_CLASS_SEPARATOR + CLASS;
 

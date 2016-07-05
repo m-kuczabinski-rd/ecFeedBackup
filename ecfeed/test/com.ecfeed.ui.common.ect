@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="com.ecfeed.ui.common" version="1">
+    <Class name="com.ecfeed.ui.common.ImplementerTest" runOnAndroid="false">
+        <Method name="implementProject">
+            <Parameter name="partlyImplemented" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+        </Method>
+        <Method name="implementClass">
+            <Parameter name="packageExists" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+        </Method>
+        <Method name="implementMethod">
+            <Parameter name="allParametersImplemented" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Parameter name="classExists" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+        </Method>
+        <Method name="implementParameter">
+            <Parameter name="numOfPartitions" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implement\sempty\senum" value="0"/>
+                <Choice name="one\svalue" value="1"/>
+                <Choice name="several\svalues" value="3"/>
+            </Parameter>
+            <Parameter name="packageExists" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="no\spackage\syet" value="false"/>
+                <Choice name="package\sexists" value="true"/>
+            </Parameter>
+            <Parameter name="isPartialyImplemented" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="partialy\simplemented" value="true"/>
+                <Choice name="not\simplemented" value="false"/>
+            </Parameter>
+            <Constraint name="constraint">
+                <Premise>
+                    <Statement choice="implement\sempty\senum" parameter="numOfPartitions" relation="="/>
+                </Premise>
+                <Consequence>
+                    <Statement choice="not\simplemented" parameter="isPartialyImplemented" relation="="/>
+                </Consequence>
+            </Constraint>
+            <TestCase testSuite="basic\stests">
+                <TestParameter choice="implement\sempty\senum"/>
+                <TestParameter choice="no\spackage\syet"/>
+                <TestParameter choice="not\simplemented"/>
+            </TestCase>
+            <TestCase testSuite="basic\stests">
+                <TestParameter choice="one\svalue"/>
+                <TestParameter choice="no\spackage\syet"/>
+                <TestParameter choice="not\simplemented"/>
+            </TestCase>
+            <TestCase testSuite="basic\stests">
+                <TestParameter choice="several\svalues"/>
+                <TestParameter choice="no\spackage\syet"/>
+                <TestParameter choice="partialy\simplemented"/>
+            </TestCase>
+            <TestCase testSuite="2-wise">
+                <TestParameter choice="implement\sempty\senum"/>
+                <TestParameter choice="no\spackage\syet"/>
+                <TestParameter choice="not\simplemented"/>
+            </TestCase>
+            <TestCase testSuite="2-wise">
+                <TestParameter choice="one\svalue"/>
+                <TestParameter choice="no\spackage\syet"/>
+                <TestParameter choice="partialy\simplemented"/>
+            </TestCase>
+            <TestCase testSuite="2-wise">
+                <TestParameter choice="one\svalue"/>
+                <TestParameter choice="package\sexists"/>
+                <TestParameter choice="not\simplemented"/>
+            </TestCase>
+            <TestCase testSuite="2-wise">
+                <TestParameter choice="several\svalues"/>
+                <TestParameter choice="package\sexists"/>
+                <TestParameter choice="partialy\simplemented"/>
+            </TestCase>
+            <TestCase testSuite="2-wise">
+                <TestParameter choice="several\svalues"/>
+                <TestParameter choice="no\spackage\syet"/>
+                <TestParameter choice="not\simplemented"/>
+            </TestCase>
+            <TestCase testSuite="2-wise">
+                <TestParameter choice="implement\sempty\senum"/>
+                <TestParameter choice="package\sexists"/>
+                <TestParameter choice="not\simplemented"/>
+            </TestCase>
+        </Method>
+        <Method name="implementTestCase"/>
+        <Method name="implementChoice">
+            <Parameter name="parameterTypeImplemented" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Parameter name="isChoiceAbstract" type="boolean" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+        </Method>
+    </Class>
+</Model>

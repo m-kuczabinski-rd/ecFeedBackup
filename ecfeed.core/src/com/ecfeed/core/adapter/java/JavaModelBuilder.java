@@ -120,23 +120,23 @@ public class JavaModelBuilder {
 	protected String getDefaultExpectedValueString(String type) {
 		return "0";
 //		switch(type){
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
 //			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
 //			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR:
 //			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE:
 //			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT:
 //			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_INT:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_INT:
 //			return Constants.DEFAULT_EXPECTED_INT_VALUE;
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_LONG:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_LONG:
 //			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_SHORT:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_SHORT:
 //			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
-//		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
+//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
 //			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 //		default:
 //			return ClassUtils.defaultEnumExpectedValueString(type);

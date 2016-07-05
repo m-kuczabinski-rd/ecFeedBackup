@@ -19,7 +19,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class ModelPage extends FormPage {
-	private static final String ID = "com.testify.ecfeed.pages.refactored";
+	private static final String ID = "com.ecfeed.pages.refactored";
 	private static final String TITLE = "model";
 
 	private ModelMasterDetailsBlock fBlock;
