@@ -10,12 +10,25 @@
 
 package com.ecfeed.core.utils;
 
+import java.io.IOException;
+
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
+
 public class SystemLogger {
 
 	private static final String EC_FEED_ERROR = "ECFEEDERR"; 
 	private static final String EC_FEED_INFO = "ECFEEDINF";
 	private static final int ONE_LEVEL_DOWN_ON_STACK = 1;  // level1: logCatch
 	private static final int TWO_LEVELS_DOWN_ON_STACK = 2; // level1: logThrow, level2 SomeException.report
+	
+	private static final String LOG = "ecFeedLog.txt";
+	private static boolean fLogToFile = false;
+	private static boolean fFirstLogError = true;
+	
+	public static void setLogToFileAndOutput() {
+		fLogToFile = true;
+	}
 
 	public static void logThrow(String message) {
 		logLine( EC_FEED_ERROR + ": Exception thrown");
@@ -65,18 +78,38 @@ public class SystemLogger {
 	}
 
 	private static void logIndentedLine(String line) {
-		System.out.println("\t" + line);
+		printLine("\t" + line);
 	}
 
 	private static void logIndented2Line(String line) {
-		System.out.println("\t\t" + line);
+		printLine("\t\t" + line);
 	}	
 
 	private static void logLine(String line) {
-		System.out.println(line);
+		printLine(line);
 	}
 
 	private static void logEmptyLine() {
-		System.out.println("");
-	}	
+		printLine("");
+	}
+	
+	public static void printLine(String line) {
+		System.out.println(line);
+		
+		if (!fLogToFile) {
+			return;
+		}
+		
+		try {
+			TextFileHelper.appendLine(LOG, line);
+		} catch (IOException e) {
+			if (fFirstLogError) {
+				fFirstLogError = false;
+				final String DIALOG_TITLE = "Reported problem";
+				final String MSG = "Can not write to log file !";
+				MessageDialog.openError(Display.getDefault().getActiveShell(), DIALOG_TITLE, MSG);
+				System.out.println(MSG);
+			}
+		}
+	}
 }
