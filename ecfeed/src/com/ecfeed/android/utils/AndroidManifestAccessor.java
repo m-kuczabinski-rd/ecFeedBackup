@@ -28,7 +28,6 @@ import nu.xom.Serializer;
 import com.ecfeed.core.runner.Messages;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.ecfeed.core.utils.StringHelper;
 
 public class AndroidManifestAccessor {
 
@@ -323,7 +322,7 @@ public class AndroidManifestAccessor {
 	}
 
 	public String getMainActivityClassName() {
-		return StringHelper.removePrefix(".", getMainActivityValue());
+		return getMainActivityValue();
 	}
 
 	public String getMainActivityValue() {
