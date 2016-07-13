@@ -31,7 +31,7 @@ public class SystemLogger {
 	}
 
 	public static void logThrow(String message) {
-		logLine( EC_FEED_ERROR + ": Exception thrown");
+		logSimpleLine( EC_FEED_ERROR + ": Exception thrown");
 		logIndentedLine("Message: " + message);
 
 		StackTraceElement[] stackElements = new Throwable().getStackTrace(); 
@@ -41,7 +41,7 @@ public class SystemLogger {
 	}
 
 	public static void logCatch(String message) {
-		logLine(EC_FEED_ERROR + ": Exception caught");
+		logSimpleLine(EC_FEED_ERROR + ": Exception caught");
 		logIndentedLine("Message: " + message);
 		StackTraceElement element = new Throwable().getStackTrace()[ONE_LEVEL_DOWN_ON_STACK];
 		logCurrentStackElement(element);
@@ -55,7 +55,7 @@ public class SystemLogger {
 	}
 
 	public static void logInfoWithStack(String message) {
-		logLine(EC_FEED_INFO + ": " + message);
+		logSimpleLine(EC_FEED_INFO + ": " + message);
 		StackTraceElement[] stackElements = new Throwable().getStackTrace();
 		StackTraceElement element = stackElements[ONE_LEVEL_DOWN_ON_STACK];
 		logCurrentStackElement(element);
@@ -78,22 +78,22 @@ public class SystemLogger {
 	}
 
 	private static void logIndentedLine(String line) {
-		printLine("\t" + line);
+		logLine("\t" + line);
 	}
 
 	private static void logIndented2Line(String line) {
-		printLine("\t\t" + line);
+		logLine("\t\t" + line);
 	}	
 
-	private static void logLine(String line) {
-		printLine(line);
+	private static void logSimpleLine(String line) {
+		logLine(line);
 	}
 
 	private static void logEmptyLine() {
-		printLine("");
+		logLine("");
 	}
 	
-	public static void printLine(String line) {
+	public static void logLine(String line) {
 		System.out.println(line);
 		
 		if (!fLogToFile) {
