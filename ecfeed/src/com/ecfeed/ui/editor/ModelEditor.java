@@ -80,7 +80,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	public class SourceEditorInput implements IEditorInput{
 
 		@Override
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@SuppressWarnings({ "rawtypes" })
 		public Object getAdapter(Class adapter) {
 			return null;
 		}
